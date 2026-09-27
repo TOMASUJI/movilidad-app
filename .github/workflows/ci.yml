@@ -1,0 +1,44 @@
+# Integración continua del proyecto.
+#  - pruebas: se ejecutan en cada pull request y en cada cambio de main / it-NN.
+#  - metodologia: marca en rojo cualquier commit que llegue a main o a it-NN
+#    sin pasar por una pull request (sustituye a la protección de ramas, que
+#    GitHub no ofrece en repositorios privados de cuentas gratuitas).
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main, 'it-*']
+
+jobs:
+  pruebas:
+    name: Pruebas
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+      - run: npm ci
+      - run: npm test
+
+  metodologia:
+    name: Metodología de ramas
+    # Solo en push, y no cuando la rama se crea por primera vez
+    if: github.event_name == 'push' && github.event.before != '0000000000000000000000000000000000000000'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: read
+    steps:
+      - name: Comprobar que el commit viene de una pull request
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          prs=$(gh api "repos/${{ github.repository }}/commits/${{ github.sha }}/pulls" --jq 'length')
+          if [ "$prs" = "0" ]; then
+            echo "::error::Commit directo a ${{ github.ref_name }} sin pull request (autor: ${{ github.actor }}). Revertir y rehacer mediante PR."
+            exit 1
+          fi
+          echo "Correcto: el commit llega a ${{ github.ref_name }} mediante una pull request."

@@ -1,0 +1,31 @@
+{
+  "name": "movilidad-app",
+  "private": true,
+  "description": "Aplicación web de movilidad — proyecto conjunto EI1039/EI1048 (UJI, 2026-27)",
+  "workspaces": [
+    "apps/*"
+  ],
+  "engines": {
+    "node": ">=24.15.0"
+  },
+  "scripts": {
+    "historia": "node scripts/historia.mjs",
+    "test": "npm run test:api && npm run test:web",
+    "test:api": "npm run test -w apps/api",
+    "test:web": "npm run test -w apps/web -- --watch=false",
+    "start:api": "npm run start:dev -w apps/api",
+    "start:web": "npm run start -w apps/web",
+    "prepare": "husky"
+  },
+  "allowScripts": {
+    "esbuild@0.28.2": true,
+    "@parcel/watcher@2.6.0": true,
+    "lmdb@3.5.6": true,
+    "msgpackr-extract@3.0.4": true
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^21.2.3",
+    "@commitlint/config-conventional": "^21.2.3",
+    "husky": "^9.1.7"
+  }
+}
