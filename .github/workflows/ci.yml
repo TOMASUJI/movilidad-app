@@ -3,6 +3,8 @@
 #  - metodologia: marca en rojo cualquier commit que llegue a main o a it-NN
 #    sin pasar por una pull request (sustituye a la protección de ramas, que
 #    GitHub no ofrece en repositorios privados de cuentas gratuitas).
+#  - aislamiento-spike: marca en rojo cualquier pull request que intente
+#    fusionar la rama del spike (it-00) con main. El spike nunca llega a main.
 name: CI
 
 on:
@@ -42,3 +44,16 @@ jobs:
             exit 1
           fi
           echo "Correcto: el commit llega a ${{ github.ref_name }} mediante una pull request."
+
+  aislamiento-spike:
+    name: Aislamiento del spike
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Comprobar que it-00 no se fusiona con main
+        run: |
+          if [ "${{ github.head_ref }}" = "it-00" ] && [ "${{ github.base_ref }}" = "main" ]; then
+            echo "::error::La rama it-00 (spike) no se fusiona nunca con main. Cierra esta pull request sin fusionarla."
+            exit 1
+          fi
+          echo "Correcto: esta pull request no fusiona el spike con main."
