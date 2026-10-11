@@ -1,0 +1,27 @@
+// Describe las tablas de la base de datos. Prisma genera a partir de aquí
+// las migraciones (SQL) y el cliente tipado para TypeScript.
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// Spike S04: una ruta calculada y guardada.
+model Ruta {
+  id         String   @id @default(uuid()) @db.Uuid
+  origenLat  Float    @map("origen_lat")
+  origenLon  Float    @map("origen_lon")
+  destinoLat Float    @map("destino_lat")
+  destinoLon Float    @map("destino_lon")
+  modo       String
+  distanciaM Float    @map("distancia_m")
+  duracionS  Float    @map("duracion_s")
+  geometria  Json
+  creadaEn   DateTime @default(now()) @map("creada_en")
+
+  @@map("rutas")
+}
