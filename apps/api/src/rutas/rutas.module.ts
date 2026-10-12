@@ -10,6 +10,9 @@ import { RUTA_REPOSITORY } from './application/ports/ruta.repository.js';       
 import { PrismaRutaRepository } from './infrastructure/prisma-ruta.repository.js';    // La implementación que se guarda con la llave
 import { RutasController } from './interface/http/rutas.controller.js';               // El controlador de rutas (resuelve las peticiones http)
 
+import { CALCULADOR_RUTAS } from './application/ports/calculador-rutas.js';       //La llave de calculador rutas
+import { OrsCalculadorRutas } from './infrastructure/ors-calculador-rutas.js';    //La implementación de calculador rutas
+
 
 //###### BLOQUE 2 ######
 // A revisar lo de dentro de los proveedores, no lo he entendido muy bien
@@ -28,6 +31,15 @@ import { RutasController } from './interface/http/rutas.controller.js';         
       provide: RUTA_REPOSITORY,
       useFactory: (prisma: PrismaClient) => new PrismaRutaRepository(prisma),
       inject: [PrismaClient],
+    },
+    // Proveedor 3, calculador de rutas
+    {
+      provide: CALCULADOR_RUTAS,
+      useFactory: () =>
+        new OrsCalculadorRutas({
+          apiKey: process.env['ORS_API_KEY'] ?? '',
+          baseUrl: process.env['ORS_BASE_URL'] ?? 'https://api.heigit.org/openrouteservice',
+        }),
     },
   ],
 })
