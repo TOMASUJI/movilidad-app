@@ -1,0 +1,14 @@
+<div class="mapa" #contenedor></div>
+
+@if (ruta(); as r) {
+  <div class="resumen">
+    <strong>Castellón → Valencia</strong>
+    <span>en coche</span>
+    <span>{{ (r.distanciaM / 1000).toFixed(1) }} km</span>
+    <span>{{ (r.duracionS / 60).toFixed(0) }} min</span>
+  </div>
+}
+
+@if (error(); as mensaje) {
+  <div class="resumen error">{{ mensaje }}</div>
+}

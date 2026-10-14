@@ -1,1 +1,5 @@
 /* You can add global styles to this file, and also import other style files */
+// Esta es la hoja de estilos global de la web
+
+@use 'leaflet/dist/leaflet';     //Añadimos la librería de estilos de leaflet a nuestra hoja de estilos global
+
