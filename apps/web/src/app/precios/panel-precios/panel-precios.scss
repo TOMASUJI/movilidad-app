@@ -1,0 +1,42 @@
+// Estilos del panel de precios: pequeño, semitransparente, arriba a la derecha y sin bloquear el mapa
+
+.panel {
+  position: fixed;                          // Fijo respecto a la ventana: no depende de dónde esté el componente en app.html
+  top: 12px;
+  right: 12px;
+  z-index: 1000;                            // Por encima de las teselas de Leaflet
+  max-width: 300px;
+  padding: 8px 12px;
+  background: rgba(255, 255, 255, 0.92);    // Blanco casi opaco: se intuye el mapa debajo
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  font-family: sans-serif;
+  font-size: 13px;
+  pointer-events: none;                     // Los clics lo "atraviesan" y llegan al mapa (como el cartel de ayuda)
+}
+
+.titulo {
+  margin: 0 0 6px;
+  font-size: 11px;
+  font-weight: bold;
+  text-transform: uppercase;                // "PRECIOS DE HOY"
+  color: #555;
+}
+
+.fila {
+  display: grid;                            // Rejilla de 2 columnas: nombre a la izquierda, valor a la derecha…
+  grid-template-columns: 1fr auto;
+  column-gap: 12px;
+  & + & { margin-top: 6px; }                // Separación solo entre una fila y la siguiente
+}
+
+.nombre { font-weight: bold; }
+.valor  { font-weight: bold; color: #1565c0; }          // Azul, el mismo que la línea de la ruta
+
+.fuente {
+  grid-column: 1 / -1;                      // …y la fuente debajo, ocupando las dos columnas
+  font-size: 11px;
+  color: #777;
+}
+
+.error { color: #c62828; }                  // Rojo, el mismo que la chincheta B

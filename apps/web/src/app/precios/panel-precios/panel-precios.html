@@ -1,0 +1,30 @@
+<!-- Panel flotante con los precios de hoy y su fuente. Cada precio tiene tres estados: cargando, dato o error -->
+<aside class="panel">
+  <p class="titulo">Precios de hoy</p>
+
+  <!-- Gasolina -->
+  <div class="fila">
+    <span class="nombre">Gasolina 95</span>
+    @if (gasolina(); as g) {
+      <span class="valor">{{ g.eurosPorLitro.toFixed(3) }} €/L</span>
+      <span class="fuente">Media de {{ g.gasolineras }} gasolineras de Castellón · Ministerio ({{ g.fecha }})</span>
+    } @else if (errorGasolina()) {
+      <span class="fuente error">No disponible</span>
+    } @else {
+      <span class="fuente">Cargando…</span>
+    }
+  </div>
+
+  <!-- Electricidad -->
+  <div class="fila">
+    <span class="nombre">Electricidad</span>
+    @if (electricidad(); as e) {
+      <span class="valor">{{ e.eurosPorKwh.toFixed(4) }} €/kWh</span>
+      <span class="fuente">Media PVPC del {{ e.fecha }} ({{ e.horas }} h) · Red Eléctrica</span>
+    } @else if (errorElectricidad()) {
+      <span class="fuente error">No disponible</span>
+    } @else {
+      <span class="fuente">Cargando…</span>
+    }
+  </div>
+</aside>
