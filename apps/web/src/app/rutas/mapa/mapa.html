@@ -12,3 +12,6 @@
 @if (error(); as mensaje) {
   <div class="resumen error">{{ mensaje }}</div>
 }
+
+
+<div class="ayuda">{{ ayuda() }}</div>   <!-- Lee la señal ayuda: cuando cambie con ayuda.set(...), Angular actualiza este texto solo -->
