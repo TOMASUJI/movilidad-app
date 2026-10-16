@@ -3,9 +3,10 @@
 import { Component, signal } from '@angular/core';
 // import { RouterOutlet } from '@angular/router';
 import { Mapa } from './rutas/mapa/mapa';             //
+import { PanelPrecios } from './precios/panel-precios/panel-precios';   // El panel de precios
 
 @Component({
-  imports: [Mapa],
+  imports: [Mapa, PanelPrecios],   // Componentes que usa la plantilla de App
   selector: 'app-root',
   styleUrl: './app.scss',
   templateUrl: './app.html',
