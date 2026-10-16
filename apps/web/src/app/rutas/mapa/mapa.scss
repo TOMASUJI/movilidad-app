@@ -27,3 +27,19 @@
   background: #ffebee;
   color: #b71c1c;
 }
+
+
+.ayuda {                                    // El cartel de ayuda, flotando encima del mapa
+  position: absolute;                       // Se coloca respecto al componente, por encima del mapa (como la tarjeta del resumen)
+  top: 12px;                                // Pegado arriba…
+  left: 50%;                                // …y centrado en horizontal:
+  transform: translateX(-50%);              // movemos el cartel a la izquierda la mitad de su ancho para que quede centrado de verdad
+  z-index: 1000;                            // Por encima de las teselas de Leaflet (si no, quedaría debajo del mapa)
+  padding: 8px 14px;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+  font-family: sans-serif;
+  font-size: 14px;
+  pointer-events: none;                     // Los clics "atraviesan" el cartel y llegan al mapa
+}

@@ -49,6 +49,10 @@ export class Mapa {
   private readonly contenedor = viewChild.required<ElementRef<HTMLDivElement>>('contenedor');                   // Una referencia al <div> de la plantilla donde irá el mapa. "required" indica que tiene que existir
   private mapa?: L.Map;                                                                                         // El mapa de leaflet con ? porque al principio no existe y se crea después
 
+  private readonly capa = L.layerGroup();                                     // Un "cajón" donde metemos las chinchetas y la línea; así se borra todo de golpe con capa.clearLayers()
+  private origenPendiente: Coordenada | null = null;                          // El origen del primer clic, esperando a que llegue el segundo (el destino). null = no hay ninguno pendiente
+  protected readonly ayuda = signal('Haz clic en el mapa para elegir el origen (A)'); // Texto de ayuda que se verá en pantalla y cambiará según el paso
+
 
   // Las señales son la clave del patrón MVVM
   // En el ejemplo de abajo, se lee con ruta() y se escribe con ruta.set(nuevoValor)
@@ -62,6 +66,11 @@ export class Mapa {
     afterNextRender(() => this.iniciarMapa());                                                                  // Leaflet necesita que el <div> ya esté pintado en la pantalla
   }                                                                                                             // "afterNextRender()" significa que ejecute el código justo después de que la pantalla se ejecute por primera vez
 
+  private ponerChincheta(punto: Coordenada, letra: 'A' | 'B'): void {                                           // letra solo puede ser 'A' o 'B': el compilador no deja pasar otra cosa (como un enum)
+    const color = letra === 'A' ? '#2e7d32' : '#c62828';                                                    // A verde, B roja (el operador ternario es igual que en Java)
+    L.marker([punto.lat, punto.lon], { icon: chincheta(letra, color) }).addTo(this.capa);                       // La chincheta va al "cajón", no directamente al mapa
+  }
+
   private iniciarMapa(): void {
     this.mapa = L.map(this.contenedor().nativeElement).setView([CASTELLON.lat, CASTELLON.lon], 9);              // L.map(div).setView([lat, lon], 9) crea el mapa dentro del <div>, centrado en Castellón, con zoom 9 (se ve la provincia entera).
 
@@ -71,33 +80,55 @@ export class Mapa {
       }).addTo(this.mapa);
 
 
-    //Las dos chinchetas: “A” verde en Castellón y “B” roja en Valencia, con la función del bloque 1.
+      this.capa.addTo(this.mapa);                                                        // Ponemos el "cajón" encima del mapa: todo lo que metamos en él se verá
 
-    L.marker([CASTELLON.lat, CASTELLON.lon], { icon: chincheta('A', '#2e7d32') }).addTo(this.mapa);
-    L.marker([VALENCIA.lat, VALENCIA.lon], { icon: chincheta('B', '#c62828') }).addTo(this.mapa);
+      this.mapa.on('click', (evento) =>                                                  // Escuchamos los clics en el mapa (como un addActionListener en Swing)
+        this.alHacerClic({ lat: evento.latlng.lat, lon: evento.latlng.lng }),            // Leaflet da las coordenadas en latlng (ojo: él usa "lng", nosotros "lon")
+      );
 
-    void this.calcularRuta();                                                                                   // void this.calcularRuta() pide la ruta a la API (bloque 3). El void indica que lanzamos la petición sin esperarla aquí: cuando llegue la respuesta, el propio método la pintará.
+      this.ponerChincheta(CASTELLON, 'A');                                               // Ruta de ejemplo al abrir la página, como antes
+      this.ponerChincheta(VALENCIA, 'B');
+
+      void this.calcularRuta(CASTELLON, VALENCIA);   // Pide la ruta de ejemplo a la API (bloque 3). El void indica que lanzamos la petición sin esperarla aquí: cuando llegue la respuesta, el propio método la pintará.
+  }
+
+  private alHacerClic(punto: Coordenada): void {
+    if (this.origenPendiente === null) {                                   // PRIMER CLIC: empieza una ruta nueva
+      this.capa.clearLayers();                                             // Vaciamos el cajón: fuera chinchetas y línea anteriores
+      this.ruta.set(null);                                                 // Fuera la tarjeta de km y minutos
+      this.error.set(null);                                                // Fuera el mensaje de error, si lo había
+      this.origenPendiente = punto;                                        // Recordamos el origen hasta el siguiente clic
+      this.ponerChincheta(punto, 'A');
+      this.ayuda.set('Ahora haz clic para elegir el destino (B)');
+    } else {                                                               // SEGUNDO CLIC: destino y cálculo
+      const origen = this.origenPendiente;                                 // Copiamos el origen a una variable local…
+      this.origenPendiente = null;                                         // …y dejamos el estado listo para el siguiente primer clic
+      this.ponerChincheta(punto, 'B');
+      this.ayuda.set('Haz clic en el mapa para elegir un nuevo origen (A)');
+      void this.calcularRuta(origen, punto);                               // Pedimos la ruta a la API (sin esperarla aquí, como antes)
+    }
   }
 
   //###### BLOQUE 3 ######
   // Pedir la ruta y dibujarla
 
-  private async calcularRuta(): Promise<void> {
+    private async calcularRuta(origen: Coordenada, destino: Coordenada): Promise<void> { // NUEVO: ahora recibe los dos puntos como parámetros
+    this.error.set(null);                                                                // NUEVO: quitamos un error anterior antes de volver a intentarlo
     try {
-      const ruta = await this.api.calcular(CASTELLON, VALENCIA, 'coche');                   // await this.api.calcular(CASTELLON, VALENCIA, 'coche') llama al servicio, que hace el POST /api/rutas/calcular.
-      this.ruta.set(ruta);                                                                  // guarda la ruta en la señal
+      const ruta = await this.api.calcular(origen, destino, 'coche');                    // NUEVO: usa los parámetros en vez de CASTELLON y VALENCIA. Llama al servicio, que hace el POST /api/rutas/calcular
+      this.ruta.set(ruta);                                                               // guarda la ruta en la señal
 
-      const linea = L.geoJSON(ruta.geometria, {                                             // dibuja la línea de la ruta
+      const linea = L.geoJSON(ruta.geometria, {                                          // dibuja la línea de la ruta
         style: { color: '#1565c0', weight: 6, opacity: 0.85 },
-      }).addTo(this.mapa!);
+      }).addTo(this.capa);                                                               // NUEVO: la línea va al "cajón" (antes this.mapa!), así se borra con el siguiente clic
 
       // fitBounds(linea.getBounds(), { padding: [40, 40] }) ajusta el zoom y el centro para que la ruta entera quepa en pantalla,
       // con 40 píxeles de margen para que las chinchetas no queden pegadas al borde.
-      // this.mapa!: el ! le dice a TypeScript “sé que aquí mapa ya existe”. El atributo era opcional (mapa?), pero en este punto ya se ha creado en iniciarMapa
+      // this.mapa!: el ! le dice a TypeScript "sé que aquí mapa ya existe". El atributo era opcional (mapa?), pero en este punto ya se ha creado en iniciarMapa
       // La exclamación hay que usarla solo cuando se esté seguro de que ya existe el componente, en este caso el mapa
       this.mapa!.fitBounds(linea.getBounds(), { padding: [40, 40] });
     } catch {
-      this.error.set('No se ha podido calcular la ruta. ¿Está arrancada la API?');
+      this.error.set('No se ha podido calcular la ruta. ¿Hay carreteras cerca de los puntos? ¿Está arrancada la API?'); // NUEVO: mensaje más útil (ORS falla si clicas en el mar o en el monte)
     }
   }
 
