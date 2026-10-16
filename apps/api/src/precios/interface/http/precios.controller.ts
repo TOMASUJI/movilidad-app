@@ -8,7 +8,7 @@
 
 // ###### BLOQUE 1 ######
 // Imports
-
+import { PRECIOS_ELECTRICIDAD, type PreciosElectricidad } from '../../application/ports/precios-electricidad.js'; // El puerto nuevo y su llave
 import { BadRequestException, Controller, Get, Inject, Query } from '@nestjs/common';  // Decoradores de Nest (como las anotaciones de Spring) y la excepción que responde 400
 import {
   PRECIOS_COMBUSTIBLE,           // La llave para pedir a Nest la implementación (sin "type": se usa al ejecutar)
@@ -29,7 +29,9 @@ const TIPOS_VALIDOS: TipoCombustible[] = ['gasolina95', 'gasoleoA'];   // Como u
 
 @Controller('precios')                                     // Todas sus URL empiezan por /precios (con el prefijo global: /api/precios)
 export class PreciosController {
-  constructor(@Inject(PRECIOS_COMBUSTIBLE) private readonly precios: PreciosCombustible) {}   // Nest le entrega lo que haya guardado con la llave PRECIOS_COMBUSTIBLE (como @Autowired + @Qualifier)
+  constructor(@Inject(PRECIOS_COMBUSTIBLE) private readonly precios: PreciosCombustible,
+              @Inject(PRECIOS_ELECTRICIDAD) private readonly electricidad: PreciosElectricidad   // Nest inyecta el adaptador de REE, igual que hace con el del Ministerio
+              ) {}   // Nest le entrega lo que haya guardado con la llave PRECIOS_COMBUSTIBLE (como @Autowired + @Qualifier)
 
   @Get('combustible')                                      // GET /api/precios/combustible
   combustible(
@@ -43,5 +45,15 @@ export class PreciosController {
       throw new BadRequestException('La provincia debe ser un código de dos cifras, por ejemplo 12');          // Responde 400
     }
     return this.precios.precioMedio(tipo as TipoCombustible, provincia);   // Ya validado: lo pasamos al puerto. El cast le dice a TypeScript que el tipo es correcto
+  }
+
+    // GET /api/precios/electricidad?fecha=2026-10-16   (sin fecha → hoy)
+  @Get('electricidad')
+  precioElectricidad(@Query('fecha') fecha?: string) {
+    const dia = fecha ?? new Date().toLocaleDateString('sv-SE', { timeZone: 'Europe/Madrid' }); // Hoy en España, ya en formato AAAA-MM-DD
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(dia)) {
+      throw new BadRequestException('La fecha debe tener el formato AAAA-MM-DD');           // → HTTP 400, como con los parámetros del combustible
+    }
+    return this.electricidad.precioMedio(dia);
   }
 }
