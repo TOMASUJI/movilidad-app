@@ -1,0 +1,63 @@
+// Esquema de la base de datos de la iteración 1: usuarios, sesiones y vehículos.
+
+// ###### BLOQUE 1 ###### Configuración
+generator client {
+  provider = "prisma-client"                 // Genera el código TypeScript para usar la base de datos…
+  output   = "../src/generated/prisma"       // …en esta carpeta (la que borraste; se vuelve a crear)
+}
+
+datasource db {
+  provider = "postgresql"                    // Usamos PostgreSQL (la dirección está en el .env)
+}
+
+
+// ###### BLOQUE 2 ###### Usuarios
+model Usuario {
+  id                String     @id @default(uuid()) @db.Uuid                          // Clave primaria, se genera sola
+  correo            String     @unique @map("correo_elec") @db.VarChar(100)           // @unique: no puede haber dos iguales (HU01)
+  contrasenaCifrada String     @map("contrasenya") @db.VarChar(255)                   // Siempre el hash de argon2, nunca la contraseña
+  nombre            String?    @db.VarChar(255)                                       // ? = opcional: al registrarse solo se piden correo y contraseña
+  telefono          String?    @db.VarChar(20)
+  ciudad            String?    @db.VarChar(100)
+  creadoEn          DateTime   @default(now()) @map("creado_en")
+
+  sesiones          Sesion[]                                                          // Un usuario tiene 0..* sesiones
+  vehiculos         Vehiculo[]                                                        // Un usuario tiene 0..* vehículos
+
+  @@map("usuarios")                                                                   // Nombre de la tabla en PostgreSQL
+}
+
+// ###### BLOQUE 3 ###### Sesiones
+model Sesion {
+  token     String   @id @db.VarChar(64)                                   // Clave primaria: el token aleatorio que irá en la cookie
+  idUsuario String   @map("id_usuario") @db.Uuid                           // De quién es la sesión
+  creadaEn  DateTime @default(now()) @map("creada_en")
+
+  usuario   Usuario  @relation(fields: [idUsuario], references: [id], onDelete: Cascade)  // FK → usuarios.id
+
+  @@map("sesiones")
+}
+
+// ###### BLOQUE 4 ###### Vehículos
+enum TipoMotor {
+  GASOLINA
+  DIESEL
+  ELECTRICO
+
+  @@map("tipo_motor")
+}
+
+model Vehiculo {
+  id        String    @id @default(uuid()) @db.Uuid                       // Clave primaria propia (ya no la matrícula)
+  idUsuario String    @map("id_usuario") @db.Uuid
+  nombre    String    @db.VarChar(30)                                      // "Coche de casa"
+  matricula String    @db.VarChar(10)
+  tipoMotor TipoMotor @map("tipo_motor")
+  consumo   Float                                                         // L/100 km o kWh/100 km: admite decimales (6,5)
+  favorito  Boolean   @default(false)                                      // Para la HU25 (iteración 3); ya lo dejamos creado
+
+  usuario   Usuario   @relation(fields: [idUsuario], references: [id], onDelete: Cascade)
+
+  @@unique([idUsuario, matricula])                                         // Un usuario no puede repetir matrícula, pero dos usuarios sí pueden tener el mismo coche
+  @@map("vehiculos")
+}
