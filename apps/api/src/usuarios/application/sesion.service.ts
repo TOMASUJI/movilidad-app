@@ -22,12 +22,12 @@ export class SesionService {
     throw new Error('No implementado (HU02)');
   }
 
-  // HU04: borra la sesión de ese token; si no existe, UserNotLoggedInException
+  // HU04: borra la sesión de ese token; si no existe, NotLoggedInUserException
   async cerrarSesion(token: string): Promise<void> {
     throw new Error('No implementado (HU04)');
   }
 
-  // El "portero": devuelve el usuario de la sesión; si el token no es válido, UserNotLoggedInException
+  // El "portero": devuelve el usuario de la sesión; si el token no es válido, NotLoggedInUserException
   async usuarioDeSesion(token: string): Promise<Usuario> {
     throw new Error('No implementado (HU02)');
   }
