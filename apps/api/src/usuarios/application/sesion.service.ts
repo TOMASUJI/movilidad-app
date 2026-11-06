@@ -7,12 +7,14 @@ import type { Sesion, Usuario } from '../domain/usuario.js';
 import type { CifradorContrasenas } from './ports/cifrador-contrasenas.js';
 import type { SesionRepository } from './ports/sesion.repository.js';
 import type { UsuarioRepository } from './ports/usuario.repository.js';
+import type { RegistroProcesos } from '../../procesos/application/ports/registro-procesos.js'; // Para saber si hay procesos en marcha (HU04)
 
 export class SesionService {
   constructor(
     private readonly usuarios: UsuarioRepository,       // Para buscar al usuario por su correo o id
     private readonly sesiones: SesionRepository,        // Para crear, buscar y borrar sesiones
     private readonly cifrador: CifradorContrasenas,     // Para comprobar la contraseña al iniciar sesión
+    private readonly procesos: RegistroProcesos,        // Para no cerrar sesión con un proceso en marcha (HU04)
   ) {}
 
     // ###### BLOQUE 2 ###### Métodos (esqueleto: se implementarán en la iteración 1)
@@ -22,7 +24,8 @@ export class SesionService {
     throw new Error('No implementado (HU02)');
   }
 
-  // HU04: borra la sesión de ese token; si no existe, NotLoggedInUserException
+  // HU04: borra la sesión de ese token; si no existe, NotLoggedInUserException;
+  //       si el usuario tiene un proceso en marcha, InProgressProcessException
   async cerrarSesion(token: string): Promise<void> {
     throw new Error('No implementado (HU04)');
   }
