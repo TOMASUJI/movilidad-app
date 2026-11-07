@@ -39,38 +39,37 @@ describe('HU02 · Iniciar sesión', () => {
 
   afterAll(() => bd.cerrar());
 
-    it('EV2.1 · con la contraseña correcta se inicia la sesión', async () => {
+  it('EV2.1 · con la contraseña correcta se inicia la sesión', async () => {
     // GIVEN: el usuario está registrado con la contraseña "34jUEgu@n7"
     const usuario = await crearUsuario(bd.prisma, {
-        correo: 'ana.martinez@gmail.com',
-        contrasenaCifrada: await cifrador.cifrar('34jUEgu@n7'),
+      correo: 'ana.martinez@gmail.com',
+      contrasenaCifrada: await cifrador.cifrar('34jUEgu@n7'),
     });
 
     // WHEN: inicia sesión con el correo y la contraseña correctos
     const sesion = await servicio.iniciarSesion(
-        'ana.martinez@gmail.com',
-        '34jUEgu@n7',
+      'ana.martinez@gmail.com',
+      '34jUEgu@n7',
     );
 
     // THEN: la sesión corresponde al usuario y se ha guardado
     expect(sesion.idUsuario).toBe(usuario.id);
     expect(await bd.prisma.sesion.count()).toBe(1);
-    });
-    
-    it('EI2.1 · con una contraseña incorrecta, WrongPasswordException', async () => {
+  });
+
+  it('EI2.1 · con una contraseña incorrecta, WrongPasswordException', async () => {
     // GIVEN: el usuario está registrado con la contraseña "34jUEgu@n7"
     await crearUsuario(bd.prisma, {
-        correo: 'ana.martinez@gmail.com',
-        contrasenaCifrada: await cifrador.cifrar('34jUEgu@n7'),
+      correo: 'ana.martinez@gmail.com',
+      contrasenaCifrada: await cifrador.cifrar('34jUEgu@n7'),
     });
 
     // WHEN + THEN: al usar una contraseña incorrecta, lanza la excepción
     await expect(
-        servicio.iniciarSesion('ana.martinez@gmail.com', '50jUEgu@n7'),
+      servicio.iniciarSesion('ana.martinez@gmail.com', '50jUEgu@n7'),
     ).rejects.toThrow(WrongPasswordException);
 
     // THEN: no se ha creado ninguna sesión
     expect(await bd.prisma.sesion.count()).toBe(0);
-    });
-
+  });
 });
