@@ -10,3 +10,9 @@ export class NotLoggedInUserException extends Error {   // Clase que herda de Er
   }
 }
 
+export class WrongPasswordException extends Error {
+  constructor() {
+    super('La contraseña no es correcta');
+    this.name = 'WrongPasswordException';
+  }
+}
