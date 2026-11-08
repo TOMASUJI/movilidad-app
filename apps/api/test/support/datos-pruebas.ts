@@ -19,6 +19,7 @@ interface DatosUsuarioPrueba {
   correo: string;
   contrasenaCifrada?: string;   // Opcional: si la prueba no comprueba contraseñas, da igual cuál sea
   nombre?: string;
+  telefono?: string;            // Opcional: lo necesita la HU03
 }
 
 // Mete un usuario en la tabla "usuarios" y lo devuelve (con el id que le ha puesto la base de datos)
@@ -28,6 +29,7 @@ export async function crearUsuario(prisma: PrismaClient, datos: DatosUsuarioPrue
       correo: datos.correo,
       contrasenaCifrada: datos.contrasenaCifrada ?? 'hash-de-prueba',   // Si no se indica, un texto cualquiera
       nombre: datos.nombre ?? null,                                      // Si no se indica, sin nombre
+      telefono: datos.telefono ?? null,                                  // Si no se indica, sin teléfono
     },
   });
 }
