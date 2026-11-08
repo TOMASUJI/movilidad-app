@@ -1,0 +1,18 @@
+
+# PostgreSQL de desarrollo para quien tenga Docker.
+# Arrancar:  docker compose up -d      Parar:  docker compose down
+services:
+  db:
+    image: postgres:17-alpine            # La misma versión que usa el CI
+    container_name: movilidad-db
+    environment:
+      POSTGRES_USER: movilidad           # Usuario y contraseña de la plantilla .env.example
+      POSTGRES_PASSWORD: movilidad
+      POSTGRES_DB: movilidad             # Crea la base de datos de desarrollo
+    ports:
+      - "5433:5432"                      # En tu ordenador, puerto 5433 (para no chocar con un PostgreSQL instalado en el 5432)
+    volumes:
+      - movilidad-datos:/var/lib/postgresql/data   # Los datos se conservan aunque pares el contenedor
+
+volumes:
+  movilidad-datos:

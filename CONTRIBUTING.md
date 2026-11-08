@@ -88,3 +88,23 @@ Cuando todas las historias de la iteración están fusionadas y estables, se abr
 - Subir secretos (API keys, contraseñas, archivos `.env`).
 - Fusionar una PR con pruebas en rojo.
 - Fusionar tu propia PR sin revisión.
+
+## 9. Nombres de archivos y clases
+
+Archivos en minúsculas con guiones y, si cumplen un papel de NestJS o son pruebas, con el sufijo de ese papel. Clases en PascalCase con el mismo sufijo en inglés. Los adaptadores llevan delante la tecnología que usan.
+
+| Qué | Archivo | Clase | Ejemplo |
+|---|---|---|---|
+| Servicio (casos de uso) | `xxx.service.ts` | `XxxService` | `sesion.service.ts` → `SesionService` |
+| Puerto de repositorio | `xxx.repository.ts` | `XxxRepository` | `usuario.repository.ts` → `UsuarioRepository` |
+| Adaptador de repositorio | `tecnologia-xxx.repository.ts` | `TecnologiaXxxRepository` | `prisma-usuario.repository.ts` → `PrismaUsuarioRepository` |
+| Otro puerto | `xxx.ts` | `Xxx` | `cifrador-contrasenas.ts` → `CifradorContrasenas` |
+| Otro adaptador | `tecnologia-xxx.ts` | `TecnologiaXxx` | `argon2-cifrador.ts` → `Argon2Cifrador` |
+| Controlador / módulo | `xxx.controller.ts` / `xxx.module.ts` | `XxxController` / `XxxModule` | `usuarios.module.ts` → `UsuariosModule` |
+| Entidades y excepciones | `xxx.ts` | `Xxx` | `usuario.ts`, `excepciones.ts` |
+| Token de inyección | en el archivo del puerto | `MAYUSCULAS_CON_GUIONES` | `USUARIO_REPOSITORY` |
+| Prueba unitaria / con base de datos | `xxx.spec.ts` / `xxx.int-spec.ts` | — | `argon2-cifrador.spec.ts` |
+| Prueba de aceptación | `test/aceptacion/huXX-nombre.int-spec.ts` | — | `hu02-inicio-sesion.int-spec.ts` |
+| Utilidad para pruebas | `test/support/xxx.ts` (sin `.spec`) | — | `datos-pruebas.ts` |
+
+Las excepciones se llaman exactamente como en los escenarios de las historias de usuario (p. ej., `NotLoggedInUserException`).

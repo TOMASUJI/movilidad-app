@@ -23,7 +23,14 @@ jobs:
           node-version-file: .nvmrc
           cache: npm
       - run: npm ci
+      - name: Generar el cliente de Prisma (src/generated no está en el repo)
+        run: npx prisma generate
+        working-directory: apps/api
+      - name: Compilación de la API (comprueba tipos, como javac)
+        run: npm run build -w apps/api
       - run: npm test
+      - name: Pruebas de integración (PostgreSQL 17 con Testcontainers)
+        run: npm run test:int
 
   metodologia:
     name: Metodología de ramas
