@@ -10,3 +10,10 @@ export class NotLoggedInUserException extends Error {   // Clase que herda de Er
   }
 }
 
+// Se lanza al modificar un dato de la cuenta con un valor no válido, por ejemplo un teléfono sin 9 dígitos (HU03)
+export class WrongModificationException extends Error {
+  constructor() {
+    super('El dato modificado no es válido');
+    this.name = 'WrongModificationException';
+  }
+}
