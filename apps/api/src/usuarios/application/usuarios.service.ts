@@ -19,7 +19,7 @@ export class UsuariosService {
 
   // ###### BLOQUE 3 ######
 
-  // HU01: Registra un usuario nuevo; si el correo ya existe, UserExistAlrredyExcepiton
+  // HU01: Registra un usuario nuevo; si el correo ya existe, UserExistsAlrredyExcepiton
   async registrar(correo: string, contrasena: string): Promise<Usuario>{
     throw new Error('No implementado (HU01)');
   }
