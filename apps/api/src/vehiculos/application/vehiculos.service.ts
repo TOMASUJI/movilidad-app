@@ -5,12 +5,16 @@ import { Vehiculo } from "../domain/vehiculo.js";
 export class VehiculosService {
 
   public darAlta(matricula: string, idUsuario: string, marca: string, modelo: string,
-    motor: string, tipoCombustible: TipoMotor, consumo: number, favorito: boolean = false,) : Vehiculo| void{
+    motor: string, tipoCombustible: TipoMotor, consumo: number, favorito: boolean = false, predeterminado: boolean = false) : Vehiculo{
       throw new Error('No implementado (HU11)');
   }
 
   public listar(idUsuario: string) : Vehiculo[] {
     throw new Error('No implementado (HU12)');
+  }
+
+  public eliminarVehiculo(idVehiculo: string, idUsuario: string ) : boolean{
+    throw new Error('No implementado (HU13)');
   }
 
 }
