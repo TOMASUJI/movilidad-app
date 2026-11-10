@@ -2,6 +2,7 @@ import { TipoMotor } from "../../generated/prisma/enums.js";
 
 export class Vehiculo {
    // ATRIBUTOS
+  public id: string;
   public matricula: string;
   private idUsuario: string;
   public marca: string;
