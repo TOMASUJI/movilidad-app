@@ -43,6 +43,7 @@ enum TipoMotor {
   GASOLINA
   DIESEL
   ELECTRICO
+  HIBRIDO
 
   @@map("tipo_motor")
 }
