@@ -25,8 +25,8 @@ describe('HU13 · Eliminar vehiculo', () => {
         const usuario = await crearUsuario(bd.prisma, { correo: 'ana@gmail.com'});
         const token = await crearSesion(bd.prisma, usuario.id);
 
-        await servicio.darAlta('1234QWR', usuario.id,'Toyota', 'Toyota Yaris', '1,5 L Diesel', 'DIESEL', 6.0);
-        await servicio.darAlta('1234QWR', usuario.id,'Volskwagen','Volskwagen Polo','1,0L Gasolina', 'GASOLINA', 5.2 );
+        await servicio.darAlta('1234QWR', usuario.id,'Toyota', 'Toyota Yaris','1,5 L híbrido', 'HIBRIDO', 6.0 );
+        await servicio.darAlta('5678TYP', usuario.id,'Volkswagen','Volkswagen Polo','1,0L Gasolina', 'GASOLINA', 5.2 );
 
         // WHEN: elimina el vehiculo (modelo:'Toyota Yaris', matricula:'1234QWR', motor:'1,5L Hibrido', consumo:'6,0')
         const vehiculo = await servicio.eliminarVehiculo('1234QWR', token);
@@ -44,7 +44,7 @@ describe('HU13 · Eliminar vehiculo', () => {
         const usuario = await crearUsuario(bd.prisma, { correo: 'ana@gmail.com' });
         const token = await crearSesion(bd.prisma, usuario.id);
 
-        const veh = await servicio.darAlta('1234QWR', usuario.id, 'Toyota', 'Toyota Yaris', '1,5 L Diesel', 'DIESEL', 6.0);
+        const veh = await servicio.darAlta('1234QWR', usuario.id, 'Toyota', 'Toyota Yaris','1,5 L híbrido', 'HIBRIDO', 6.0 );
 
         // WHEN: elimina el vehículo (matrícula: '1234QWR')
         await servicio.eliminarVehiculo(veh.id, usuario.id);
@@ -60,7 +60,7 @@ describe('HU13 · Eliminar vehiculo', () => {
         const usuario = await crearUsuario(bd.prisma, { correo: 'ana@gmail.com' });
         const token = await crearSesion(bd.prisma, usuario.id);
 
-        await servicio.darAlta('1234QWR', usuario.id, 'Toyota', 'Toyota Yaris', '1,5 L Diesel', 'DIESEL', 6.0, false, true);
+        await servicio.darAlta('1234QWR', usuario.id, 'Toyota', 'Toyota Yaris','1,5 L híbrido', 'HIBRIDO', 6.0 , false, true);
         await servicio.darAlta('5678TYP', usuario.id, 'Volkswagen', 'Volkswagen Polo', '1,0 L gasolina', 'GASOLINA', 5.2);
 
         // WHEN: elimina el vehículo predeterminado
@@ -79,7 +79,7 @@ describe('HU13 · Eliminar vehiculo', () => {
         const usuario = await crearUsuario(bd.prisma, { correo: 'ana@gmail.com' });
         const token = await crearSesion(bd.prisma, usuario.id);
 
-        const vehUno = await servicio.darAlta('1234QWR', usuario.id, 'Toyota', 'Toyota Yaris', '1,5 L Diesel', 'DIESEL', 6.0, true);
+        const vehUno = await servicio.darAlta('1234QWR', usuario.id, 'Toyota', 'Toyota Yaris','1,5 L híbrido', 'HIBRIDO', 6.0, true);
         const vehDos = await servicio.darAlta('5678TYP', usuario.id, 'Volkswagen', 'Volkswagen Polo', '1,0 L gasolina', 'GASOLINA', 5.2);
 
         // WHEN: elimina el vehículo favorito
@@ -100,7 +100,7 @@ describe('HU13 · Eliminar vehiculo', () => {
 
 
 
-        const vehUno = await servicio.darAlta('9012FGH', usuario.id, 'Toyota', 'Toyota Yaris', '1,5 L gasolina', 'GASOLINA', 4.8);
+        const vehUno = await servicio.darAlta('1234QWR', usuario.id, 'Toyota', 'Toyota Yaris','1,5 L híbrido', 'HIBRIDO', 6.0 );
         await servicio.darAlta('5678TYP', usuario.id, 'Volkswagen', 'Volkswagen Polo', '1,0 L gasolina', 'GASOLINA', 5.2);
 
 
@@ -123,7 +123,7 @@ describe('HU13 · Eliminar vehiculo', () => {
         const usuario = await crearUsuario(bd.prisma, { correo: 'ana@gmail.com' });
         const token = await crearSesion(bd.prisma, usuario.id);
 
-        const yaris = await servicio.darAlta('1234QWR', usuario.id, 'Toyota', 'Toyota Yaris', '1,5 L Diesel', 'DIESEL', 6.0);
+        const yaris = await servicio.darAlta('1234QWR', usuario.id, 'Toyota', 'Toyota Yaris', '1,5 L híbrido', 'HIBRIDO', 6.0 );
         await servicio.darAlta('5678TYP', usuario.id, 'Volkswagen', 'Volkswagen Polo', '1,0 L gasolina', 'GASOLINA', 5.2);
 
 
