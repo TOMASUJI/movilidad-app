@@ -30,7 +30,7 @@ describe('HU14 · Modificar vehículo', () => {
         const usuario = await crearUsuario(bd.prisma, { correo: 'ana@gmail.com' });
         const token = await crearSesion(bd.prisma, usuario.id);
 
-        await servicio.darAlta('1234QWR', usuario.id, 'Toyota', 'Toyota Yaris', '1,5 L diesel', 'DIESEL', 6.0);
+        await servicio.darAlta('1234QWR', usuario.id, 'Toyota', 'Toyota Yaris', '1,5 L híbrido', 'HIBRIDO', 6.0 );
         await servicio.darAlta('5678TYP', usuario.id, 'Volkswagen', 'Volkswagen Polo', '1,0 L gasolina', 'GASOLINA', 5.2);
 
         // WHEN: edita el consumo del "Toyota Yaris" a 7,0
@@ -50,7 +50,7 @@ describe('HU14 · Modificar vehículo', () => {
         const usuario = await crearUsuario(bd.prisma, { correo: 'ana@gmail.com' });
         const token = await crearSesion(bd.prisma, usuario.id);
 
-        await servicio.darAlta('1234QWR', usuario.id, 'Toyota', 'Toyota Yaris', '1,5 L diesel', 'DIESEL', 6.0);
+        await servicio.darAlta('1234QWR', usuario.id, 'Toyota', 'Toyota Yaris','1,5 L híbrido', 'HIBRIDO', 6.0 );
         await servicio.darAlta('5678TYP', usuario.id, 'Volkswagen', 'Volkswagen Polo', '1,0 L gasolina', 'GASOLINA', 5.2);
 
         // WHEN: cambia el nombre del "Toyota Yaris" a "Toyota Yaris Cross"
@@ -69,7 +69,7 @@ describe('HU14 · Modificar vehículo', () => {
         const usuario = await crearUsuario(bd.prisma, { correo: 'ana@gmail.com' });
         const token = await crearSesion(bd.prisma, usuario.id);
 
-        await servicio.darAlta('1234QWR', usuario.id, 'Toyota', 'Toyota Yaris', '1,5 L diesel', 'DIESEL', 6.0);
+        await servicio.darAlta('1234QWR', usuario.id, 'Toyota', 'Toyota Yaris','1,5 L híbrido', 'HIBRIDO', 6.0);
         await servicio.darAlta('5678TYP', usuario.id, 'Volkswagen', 'Volkswagen Polo', '1,0 L gasolina', 'GASOLINA', 5.2);
 
         // WHEN: cambia el motor del "Toyota Yaris" a "1,5 L gasolina" (combustible GASOLINA)
@@ -91,7 +91,7 @@ describe('HU14 · Modificar vehículo', () => {
         const usuario = await crearUsuario(bd.prisma, { correo: 'ana@gmail.com' });
         const token = await crearSesion(bd.prisma, usuario.id);
 
-        const vehUno = await servicio.darAlta('1234QWR', usuario.id, 'Toyota', 'Toyota Yaris', '1,5 L diesel', 'DIESEL', 6.0);
+        const vehUno = await servicio.darAlta('1234QWR', usuario.id, 'Toyota', 'Toyota Yaris','1,5 L híbrido', 'HIBRIDO', 6.0 );
         await servicio.darAlta('5678TYP', usuario.id, 'Volkswagen', 'Volkswagen Polo', '1,0 L gasolina', 'GASOLINA', 5.2);
 
         // WHEN: intenta cambiar la matrícula del "Toyota Yaris" a "4564TWR"
@@ -111,7 +111,7 @@ describe('HU14 · Modificar vehículo', () => {
         const usuario = await crearUsuario(bd.prisma, { correo: 'ana@gmail.com' });
         const token = await crearSesion(bd.prisma, usuario.id);
 
-        const vehUno = await servicio.darAlta('1234QWR', usuario.id, 'Toyota', 'Toyota Yaris', '1,5 L diesel', 'DIESEL', 6.0);
+        const vehUno = await servicio.darAlta('1234QWR', usuario.id, 'Toyota', 'Toyota Yaris','1,5 L híbrido', 'HIBRIDO', 6.0 );
         const vehDos = await servicio.darAlta('5678TYP', usuario.id, 'Volkswagen', 'Volkswagen Polo', '1,0 L gasolina', 'GASOLINA', 5.2);
 
         // WHEN: intenta poner el consumo del "Toyota Yaris" a -1
@@ -131,7 +131,7 @@ describe('HU14 · Modificar vehículo', () => {
         const usuario = await crearUsuario(bd.prisma, { correo: 'ana@gmail.com' });
         const token = await crearSesion(bd.prisma, usuario.id);
 
-        const vehUno = await servicio.darAlta('1234QWR', usuario.id, 'Toyota', 'Toyota Yaris', '1,5 L diesel', 'DIESEL', 6.0);
+        const vehUno = await servicio.darAlta('1234QWR', usuario.id, 'Toyota', 'Toyota Yaris','1,5 L híbrido', 'HIBRIDO', 6.0);
         const vehDos = await servicio.darAlta('5678TYP', usuario.id, 'Volkswagen', 'Volkswagen Polo', '1,0 L gasolina', 'GASOLINA', 5.2);
 
         // WHEN: intenta poner el consumo del "Toyota Yaris" a 0
@@ -151,7 +151,7 @@ describe('HU14 · Modificar vehículo', () => {
         const usuario = await crearUsuario(bd.prisma, { correo: 'ana@gmail.com' });
         const token = await crearSesion(bd.prisma, usuario.id);
 
-        const vehUno = await servicio.darAlta('1234QWR', usuario.id, 'Toyota', 'Toyota Yaris', '1,5 L diesel', 'DIESEL', 6.0);
+        const vehUno = await servicio.darAlta('1234QWR', usuario.id, 'Toyota', 'Toyota Yaris','1,5 L híbrido', 'HIBRIDO', 6.0);
         await servicio.darAlta('5678TYP', usuario.id, 'Volkswagen', 'Volkswagen Polo', '1,0 L gasolina', 'GASOLINA', 5.2);
 
         // WHEN: intenta poner el consumo del "Toyota Yaris" a "abc"
@@ -171,7 +171,7 @@ describe('HU14 · Modificar vehículo', () => {
         const usuario = await crearUsuario(bd.prisma, { correo: 'ana@gmail.com' });
         const token = await crearSesion(bd.prisma, usuario.id);
 
-        const vehUno = await servicio.darAlta('1234QWR', usuario.id, 'Toyota', 'Toyota Yaris', '1,5 L diesel', 'DIESEL', 6.0);
+        const vehUno = await servicio.darAlta('1234QWR', usuario.id, 'Toyota', 'Toyota Yaris','1,5 L híbrido', 'HIBRIDO', 6.0);
         await servicio.darAlta('5678TYP', usuario.id, 'Volkswagen', 'Volkswagen Polo', '1,0 L gasolina', 'GASOLINA', 5.2);
 
         // WHEN: intenta cambiar el combustible del "Toyota Yaris" a "PLUTONIO"
@@ -191,7 +191,7 @@ describe('HU14 · Modificar vehículo', () => {
         const usuario = await crearUsuario(bd.prisma, { correo: 'ana@gmail.com' });
         const token = await crearSesion(bd.prisma, usuario.id);
 
-        const vehUno = await servicio.darAlta('1234QWR', usuario.id, 'Toyota', 'Toyota Yaris', '1,5 L diesel', 'DIESEL', 6.0);
+        const vehUno = await servicio.darAlta('1234QWR', usuario.id, 'Toyota', 'Toyota Yaris','1,5 L híbrido', 'HIBRIDO', 6.0);
         await servicio.darAlta('5678TYP', usuario.id, 'Volkswagen', 'Volkswagen Polo', '1,0 L gasolina', 'GASOLINA', 5.2);
 
         // Simulamos proceso activo con 'Toyota Yaris' en uso
