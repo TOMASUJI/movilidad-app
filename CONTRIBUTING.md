@@ -107,4 +107,4 @@ Archivos en minúsculas con guiones y, si cumplen un papel de NestJS o son prueb
 | Prueba de aceptación | `test/aceptacion/huXX-nombre.int-spec.ts` | — | `hu02-inicio-sesion.int-spec.ts` |
 | Utilidad para pruebas | `test/support/xxx.ts` (sin `.spec`) | — | `datos-pruebas.ts` |
 
-Las excepciones se llaman exactamente como en los escenarios de las historias de usuario (p. ej., `UserNotLoggedInException`).
+Las excepciones se llaman exactamente como en los escenarios de las historias de usuario (p. ej., `NotLoggedInUserException`).
