@@ -3,7 +3,8 @@ import { afterAll, beforeAll, beforeEach, describe, expect, it } from 'vitest';
 import { prepararBaseDatosPruebas, type BaseDatosPruebas } from '../support/base-datos-pruebas.js';
 import { crearSesion, crearUsuario, vaciarBaseDatos } from '../support/datos-pruebas.js';
 import { VehiculosService } from '../../src/vehiculos/application/vehiculos.service.js';
-import { UserNotLoggedInException, NoVehiclesRegisteredException } from '../../src/usuarios/domain/excepciones.js';
+import { NotLoggedInUserException } from '../../src/usuarios/domain/excepciones.js';
+import { NoVehiclesRegisteredException } from '../../src/vehiculos/domain/excepciones.js';
 
 
 describe('HU12 · Listar vehículos', () => {
@@ -23,7 +24,7 @@ describe('HU12 · Listar vehículos', () => {
         });
 
         const token = await crearSesion(bd.prisma, usuario.id);
-        await servicio.darAlta('5678TYP', usuario.id, 'Volkswagen', 'Volkswagen Polo', '1,0 L gasolina', 'GASOLINA', 5.2);
+        await servicio.darAlta('1234QWR', usuario.id,'Toyota','Toyota Yaris','1,5 L híbrido', 'HIBRIDO', 6.0 );
 
 
         // WHEN: pide la lista
@@ -37,6 +38,7 @@ describe('HU12 · Listar vehículos', () => {
         // GIVEN: ana@gmail.com tiene la sesión iniciada y tres vehículos
         const usuario = await crearUsuario(bd.prisma, { correo: 'ana@gmail.com' });
         const token = await crearSesion(bd.prisma, usuario.id);
+        await servicio.darAlta('1234QWR', usuario.id,'Toyota','Toyota Yaris','1,5 L híbrido', 'HIBRIDO', 6.0 );
         await servicio.darAlta('5678TYP', usuario.id, 'Volkswagen', 'Volkswagen Polo', '1,0 L gasolina', 'GASOLINA', 5.2);
         await servicio.darAlta('1234BCD', usuario.id, 'Seat', 'Seat Ibiza', '1,0 L gasolina', 'GASOLINA', 5.0);
         await servicio.darAlta('9012FGH', usuario.id, 'Toyota', 'Toyota Yaris', '1,5 L gasolina', 'GASOLINA', 4.8);
@@ -72,7 +74,7 @@ describe('HU12 · Listar vehículos', () => {
         expect(predeterminados[0].matricula).toBe('9012FGH');
       });
       it('EI12.1 · sin sesión iniciada no puede listar', async () => {
-        await expect(servicio.listar('token-que-no-existe')).rejects.toThrow(UserNotLoggedInException);
+        await expect(servicio.listar('token-que-no-existe')).rejects.toThrow(NotLoggedInUserException);
       });
 
       it('EI12.2 · un usuario sin vehículos registrados no obtiene lista', async () => {
