@@ -10,3 +10,10 @@ export class NotLoggedInUserException extends Error {   // Clase que herda de Er
   }
 }
 
+// Se lanza al intentar cerrar sesión con un proceso en ejecución (HU04)
+export class InProgressProcessException extends Error {
+  constructor() {
+    super('Hay un proceso en ejecución');
+    this.name = 'InProgressProcessException';
+  }
+}
