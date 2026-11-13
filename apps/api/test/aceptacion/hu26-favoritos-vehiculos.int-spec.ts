@@ -71,12 +71,12 @@ describe('HU26 · Favoritos de vehículos', () => {
     expect(favoritos.map((v) => v.nombre)).toEqual(['Volkswagen Polo']);
   });
 
-   it('EI26.1 · con cinco favoritos, FavoriteLimitExceededException y el Golf no cambia', async () => {
+  it('EI26.1 · con cinco favoritos, FavoriteLimitExceededException y el Golf no cambia', async () => {
     // GIVEN: usuario con sesión iniciada y cinco vehículos ya favoritos
     const usuario = await crearUsuario(bd.prisma, {
       correo: 'ana.martinez@gmail.com',
     });
-    await crearSesion(bd.prisma, usuario.id);
+    const token = await crearSesion(bd.prisma, usuario.id);
 
     // El escenario no especifica los datos de los cinco favoritos existentes.
     await bd.prisma.vehiculo.createMany({
@@ -105,7 +105,7 @@ describe('HU26 · Favoritos de vehículos', () => {
     // WHEN + THEN: al intentar marcar el Golf, se rechaza por superar el límite
     // La función async permite comprobar tanto errores síncronos como promesas rechazadas.
     await expect(async () => {
-      await servicio.marcarFavorito(golf.id, usuario.id);
+      await servicio.marcarFavorito(token, golf.id);
     }).rejects.toThrow(FavoriteLimitExceededException);
 
     // THEN: el Golf no se marca y se conservan los cinco favoritos existentes
