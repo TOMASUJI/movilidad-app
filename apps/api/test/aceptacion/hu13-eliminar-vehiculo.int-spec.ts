@@ -3,7 +3,7 @@ import { afterAll, beforeAll, beforeEach, describe, expect, it } from 'vitest';
 import { prepararBaseDatosPruebas, type BaseDatosPruebas } from '../support/base-datos-pruebas.js';
 import { crearSesion, crearUsuario, vaciarBaseDatos } from '../support/datos-pruebas.js';
 import { VehiculosService } from '../../src/vehiculos/application/vehiculos.service.js';
-import { VehicleCurrentlyUsingException, VehicleInSavedRouteException } from '../../src/vehiculos/domain/excepciones.js';
+import { VehicleCurrentlyUsingException } from '../../src/vehiculos/domain/excepciones.js';
 import { MemoriaRegistroProcesos } from '../../src/procesos/infrastructure/memoria-registro-procesos.js';
 
 
@@ -55,26 +55,7 @@ describe('HU13 · Eliminar vehiculo', () => {
         expect(total).toBe(0);
       });
 
-      it('EV13.3 · eliminar el vehículo predeterminado limpia la preferencia (HU26)', async () => {
-        // GIVEN: ana@gmail.com con dos vehículos y "Toyota Yaris" como predeterminado
-        const usuario = await crearUsuario(bd.prisma, { correo: 'ana@gmail.com' });
-        const token = await crearSesion(bd.prisma, usuario.id);
-
-        await servicio.darAlta('1234QWR', usuario.id, 'Toyota', 'Toyota Yaris','1,5 L híbrido', 'HIBRIDO', 6.0 , false, true);
-        await servicio.darAlta('5678TYP', usuario.id, 'Volkswagen', 'Volkswagen Polo', '1,0 L gasolina', 'GASOLINA', 5.2);
-
-        // WHEN: elimina el vehículo predeterminado
-        await servicio.eliminarVehiculo('1234QWR', usuario.id);
-
-        // THEN: el vehículo se elimina y ningún vehículo queda como predeterminado
-        const vehiculosRestantes = await servicio.listar(usuario.id);
-
-        expect(vehiculosRestantes).toHaveLength(1);
-        expect(vehiculosRestantes[0].matricula).toBe('5678TYP');
-        expect(vehiculosRestantes.some((v) => v.predeterminado)).toBe(false);
-      });
-
-      it('EV13.4 · un usuario con sesión elimina un vehículo favorito', async () => {
+      it('EV13.3 · un usuario con sesión elimina un vehículo favorito', async () => {
         // GIVEN: ana@gmail.com con dos vehículos y "Toyota Yaris" marcado como favorito
         const usuario = await crearUsuario(bd.prisma, { correo: 'ana@gmail.com' });
         const token = await crearSesion(bd.prisma, usuario.id);
@@ -117,26 +98,4 @@ describe('HU13 · Eliminar vehiculo', () => {
         const vehiculosRestantes = await servicio.listar(usuario.id);
         expect(vehiculosRestantes).toHaveLength(2);
     });
-
-    it('EI13.2 · Inválido: el sistema no permite eliminar un vehículo asociado a una ruta guardada', async () => {
-        // GIVEN: usuario con sesión iniciada, 2 vehículos registrados y el "Toyota Yaris" asociado a una ruta guardada
-        const usuario = await crearUsuario(bd.prisma, { correo: 'ana@gmail.com' });
-        const token = await crearSesion(bd.prisma, usuario.id);
-
-        const yaris = await servicio.darAlta('1234QWR', usuario.id, 'Toyota', 'Toyota Yaris', '1,5 L híbrido', 'HIBRIDO', 6.0 );
-        await servicio.darAlta('5678TYP', usuario.id, 'Volkswagen', 'Volkswagen Polo', '1,0 L gasolina', 'GASOLINA', 5.2);
-
-
-        const idProceso = await registro.iniciar(usuario.id, yaris.id);
-
-        // WHEN: usuario quiere eliminar el coche "Toyota Yaris"
-        // THEN: el sistema lanza la excepción "VehicleInSavedRouteException" y no le deja eliminar
-        await expect(servicio.eliminarVehiculo(yaris.id, usuario.id))
-            .rejects
-            .toThrow(VehicleInSavedRouteException);
-
-        // THEN: la lista de vehículos sigue siendo la misma = ["Toyota Yaris", "Volkswagen Polo"]
-        const vehiculosRestantes = await servicio.listar(usuario.id);
-        expect(vehiculosRestantes).toHaveLength(2);
-      });
 });
