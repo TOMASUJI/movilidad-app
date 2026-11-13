@@ -17,7 +17,7 @@ describe('HU11 · Alta vehiculo', () => {
     beforeEach(() => vaciarBaseDatos(bd.prisma)); // Cada prueba empieza con las tablas vacías
     afterAll(() => bd.cerrar());
 
-    it('EV11.1, · un usuario con sesión da de alta su vehiculo, habiendo dado de alta anteriormente', async () => {
+    it('EV11.1 · un usuario con sesión da de alta su vehiculo, habiendo dado de alta anteriormente', async () => {
       // GIVEN: un usuario (ana@gmail.com) con la sesión iniciada y  existen vehículos registrados
       const usuario = await crearUsuario(bd.prisma, { correo: 'ana@gmail.com'
       });
@@ -36,7 +36,7 @@ describe('HU11 · Alta vehiculo', () => {
       expect(total).toBe(2);
     });
 
-    it('EV11.2, · un usuario con sesión da de alta su vehiculo, sin haber dado de alta anteriormente', async () => {
+    it('EV11.2 · un usuario con sesión da de alta su vehiculo, sin haber dado de alta anteriormente', async () => {
       // GIVEN: un usuario (ana@gmail.com) con la sesión iniciada y no existen vehículos registrados
       const usuario = await crearUsuario(bd.prisma, { correo: 'ana@gmail.com'
       });
@@ -50,7 +50,7 @@ describe('HU11 · Alta vehiculo', () => {
       expect(vehiculo).not.toBeNull();
     });
 
-    it('EV11.3, · un usuario con sesión da de alta un vehículo eléctrico con consumo en kWh/100 km', async () => {
+    it('EV11.3 · un usuario con sesión da de alta un vehículo eléctrico con consumo en kWh/100 km', async () => {
       const usuario = await crearUsuario(bd.prisma, { correo: 'ana@gmail.com' });
       const token = await crearSesion(bd.prisma, usuario.id);
 
@@ -60,7 +60,7 @@ describe('HU11 · Alta vehiculo', () => {
       expect(vehiculo).not.toBeNull();
     });
 
-    it('EV11.4, · un usuario con sesión da de alta su vehiculo, habiendo dado de alta anteriormente un mismo modelo con distinta matrícula', async () => {
+    it('EV11.4 · un usuario con sesión da de alta su vehiculo, habiendo dado de alta anteriormente un mismo modelo con distinta matrícula', async () => {
       // GIVEN: un usuario (ana@gmail.com) con la sesión iniciada y  existen vehículos registrados
       const usuario = await crearUsuario(bd.prisma, { correo: 'ana@gmail.com'
       });
@@ -79,7 +79,7 @@ describe('HU11 · Alta vehiculo', () => {
       expect(total).toBe(2);
     });
 
-    it('EV11.5, · dos usuarios con sesión dan de alta el mismo vehiculo (con misma matrícula)', async () => {
+    it('EV11.5 · dos usuarios con sesión dan de alta el mismo vehiculo (con misma matrícula)', async () => {
       // GIVEN: un usuario (ana@gmail.com) con la sesión iniciada ha dado de alta el vehiculo (modelo:'Toyota Yaris', matricula:'1234QWR', motor:'1,5L Hibrido', consumo:'6,0')
       // y  otro usuario (manolo@gmail.com) con sesión iniciada
       const usuario1 = await crearUsuario(bd.prisma, { correo: 'ana@gmail.com'
@@ -141,7 +141,7 @@ describe('HU11 · Alta vehiculo', () => {
       await expect(servicio.darAlta('1234QWRH', usuario.id,'Toyota','Toyota Yaris','1,5 L híbrido', 'HIBRIDO', -10 )).rejects.toThrow(FuelConsumptionInvalidException);
     });
 
-    it('EI11.4 · dos vehículos con misma matrícula, pero datos distintos', async () => {
+    it('EI11.7 · misma matrícula con datos distintos', async () => {
       // GIVEN:  usuario habiendo iniciado sesión y
       // su lista de vehículos= [“Toyota Yaris” (“1234QWR”, “1,5 L híbrido”,”6,0”) ]
       const usuario = await crearUsuario(bd.prisma, { correo: 'ana@gmail.com'
@@ -157,7 +157,7 @@ describe('HU11 · Alta vehiculo', () => {
       await expect(servicio.darAlta('1234QWR', usuario.id,'Volkswagen','Volkswagen Polo','1,0L Gasolina', 'GASOLINA', 5.2 )).rejects.toThrow(CarAlreadyAddedException);
     });
 
-    it('EI11.5 · marca o modelo vacío', async () => {
+    it('EI11.6 · nombre o modelo vacío', async () => {
       // GIVEN:  usuario habiendo iniciado sesión y
       // su lista de vehículos está vacía
       const usuario = await crearUsuario(bd.prisma, { correo: 'ana@gmail.com'
