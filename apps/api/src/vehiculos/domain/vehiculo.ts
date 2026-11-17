@@ -13,6 +13,14 @@ export class Vehiculo {
 
   constructor(matricula: string, idUsuario: string, marca: string, modelo: string,
     motor: string, tipoCombustible: TipoMotor, consumo: number, favorito: boolean = false,){
+      this.matricula = matricula;
+      this.idUsuario = idUsuario;
+      this.marca = marca;
+      this.modelo = modelo;
+      this.motor = motor;
+      this.tipoCombustible = tipoCombustible;
+      this.consumo = consumo;
+      this.favorito = favorito;
   }
 
 
