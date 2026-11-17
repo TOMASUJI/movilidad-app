@@ -6,7 +6,11 @@ export class VehiculosService {
 
   public darAlta(matricula: string, idUsuario: string, marca: string, modelo: string,
     motor: string, tipoCombustible: TipoMotor, consumo: number, favorito: boolean = false,) : Vehiculo| void{
-      throw new Error('No implementado (HU11)');
+      const vehiculo = new Vehiculo(matricula, idUsuario, marca, modelo, motor, tipoCombustible, consumo, favorito );
+
+
+
+      return vehiculo;
     }
 
 }
