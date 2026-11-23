@@ -6,6 +6,9 @@ import { VehiculoRepository } from "./ports/vehiculo.repository.js";
 export class VehiculosService {
   private repositorio: VehiculoRepository;
 
+  constructor(repositorio: VehiculoRepository){
+    this.repositorio = repositorio
+  }
 
   public darAlta(matricula: string, idUsuario: string, marca: string, modelo: string,
     motor: string, tipoCombustible: TipoMotor, consumo: number, favorito: boolean = false,) : Promise<Vehiculo>{
