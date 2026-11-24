@@ -4,7 +4,7 @@ export class Vehiculo {
    // ATRIBUTOS
   public id: string;
   public matricula: string;
-  private idUsuario: string;
+  public idUsuario: string;
   public marca: string;
   public modelo: string;
   public motor: string;
