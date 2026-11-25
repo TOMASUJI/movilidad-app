@@ -39,6 +39,10 @@ export class VehiculosService {
     }
 
     private esMarcaOModeloValido(marca: string, modelo: string) : boolean {
-      return (marca != null && modelo != null);
+      return (this.tieneTexto(marca) && this.tieneTexto(modelo));
+    }
+
+    private tieneTexto(valor: string | null | undefined): boolean {
+      return valor != null && valor.trim() !== '';
     }
 }
