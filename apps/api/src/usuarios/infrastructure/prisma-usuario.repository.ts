@@ -15,14 +15,14 @@ export class PrismaUsuarioRepository implements UsuarioRepository{
   constructor(private readonly prisma: PrismaClient){}               // Recibe la conexión ya abierta
 
   // ###### BLOQUE 3 ######
-  async guardar (correo: string, contrasenaCifrada: string): Promise<Usuario> {
+  async guardar(correo: string, contrasenaCifrada: string): Promise<Usuario> {
     return this.prisma.usuario.create({
       data: { correo, contrasenaCifrada },   // id, nombre, teléfono… los pone la base de datos
     });
   }
 
   async buscarPorCorreo(correo: string): Promise<Usuario | null> {
-      return this.prisma.usuario.findUnique({ where: { correo } });
+    return this.prisma.usuario.findUnique({ where: { correo } });
   }
 
   async buscarPorId(id: string): Promise<Usuario | null> {

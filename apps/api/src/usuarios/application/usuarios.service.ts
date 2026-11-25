@@ -1,5 +1,4 @@
 // Servicio de usuarios: casos de uso de la cuenta (HU01 registrarse, HU03 modificar, HU05 eliminar).
-// De momento es un ESQUELETO: los métodos existen para que las pruebas se ejecuten (en rojo).
 
 // ###### BLOQUE 1 ######
 // Imports
@@ -20,7 +19,7 @@ export class UsuariosService {
 
   // ###### BLOQUE 3 ######
 
-  // HU01: Registra un usuario nuevo; si el correo ya existe, UserExistsAlrredyExcepiton
+  // HU01: Registra un usuario nuevo; si el correo ya existe, UserExistsAlreadyException
   async registrar(correo: string, contrasena: string): Promise<Usuario>{
     if (await this.usuarios.buscarPorCorreo(correo)) {        // 0. ¿ya existe ese correo?
       throw new UserExistsAlreadyException();
