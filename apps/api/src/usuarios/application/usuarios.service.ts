@@ -7,6 +7,7 @@ import type { DatosCuenta, Usuario } from '../domain/usuario.js';           // L
 import type { CifradorContrasenas } from './ports/cifrador-contrasenas.js'; // Puerto: cifrar la contraseña al registrarse
 import type { UsuarioRepository } from './ports/usuario.repository.js';     // Puerto: guardar, actualizar y borrar usuarios
 import type { SesionService } from './sesion.service.js';                   // El "portero": quién es el usuario de un token
+import { UserExistsAlreadyException } from '../domain/excepciones.js';
 
 // ###### BLOQUE 2 ######
 // La clase
@@ -21,6 +22,9 @@ export class UsuariosService {
 
   // HU01: Registra un usuario nuevo; si el correo ya existe, UserExistsAlrredyExcepiton
   async registrar(correo: string, contrasena: string): Promise<Usuario>{
+    if (await this.usuarios.buscarPorCorreo(correo)) {        // 0. ¿ya existe ese correo?
+      throw new UserExistsAlreadyException();
+    }
     const cifrada = await this.cifrador.cifrar(contrasena);
     return this.usuarios.guardar(correo, cifrada);
   }
