@@ -28,7 +28,7 @@ describe('HU11 · Alta vehiculo', () => {
       });
 
       const token = await crearSesion(bd.prisma, usuario.id);
-      await servicio.darAlta('1234QWR', usuario.id,'Toyota','Toyota Yaris','1,5 L híbrido', 'HIBRIDO', 6.0 );
+      await servicio.darAlta('1234DWR', usuario.id,'Toyota','Toyota Yaris','1,5 L híbrido', 'HIBRIDO', 6.0 );
 
 
       // WHEN: da de alta el vehiculo ('Volkswagen','Volkswagen Polo','1,0 L gasolina', consumo:'5,2')
@@ -48,8 +48,8 @@ describe('HU11 · Alta vehiculo', () => {
 
       const token = await crearSesion(bd.prisma, usuario.id);
 
-      // WHEN: da de alta el vehiculo (modelo:'Toyota Yaris', matricula:'1234QWR', motor:'1,5L Diesel', consumo:'6,0')
-      const vehiculo = await servicio.darAlta('1234QWR', usuario.id,'Toyota','Toyota Yaris','1,5 L híbrido', 'HIBRIDO', 6.0 );
+      // WHEN: da de alta el vehiculo (modelo:'Toyota Yaris', matricula:'1234DWR', motor:'1,5L Diesel', consumo:'6,0')
+      const vehiculo = await servicio.darAlta('1234DWR', usuario.id,'Toyota','Toyota Yaris','1,5 L híbrido', 'HIBRIDO', 6.0 );
 
       // THEN: se inserta su vehiculo correctamente
       expect(vehiculo).not.toBeNull();
@@ -71,10 +71,10 @@ describe('HU11 · Alta vehiculo', () => {
       });
 
       const token = await crearSesion(bd.prisma, usuario.id);
-      await servicio.darAlta('1234QWR', usuario.id,'Toyota','Toyota Yaris','1,5 L híbrido', 'HIBRIDO', 6.0 );
+      await servicio.darAlta('1234DWR', usuario.id,'Toyota','Toyota Yaris','1,5 L híbrido', 'HIBRIDO', 6.0 );
 
 
-      // WHEN: da de alta el vehiculo (modelo:'Toyota Yaris', matricula:'1234QWR', motor:'1,5 L híbrido', consumo:'6,0')
+      // WHEN: da de alta el vehiculo (modelo:'Toyota Yaris', matricula:'1234DWR', motor:'1,5 L híbrido', consumo:'6,0')
       const vehiculo = await servicio.darAlta('5678TYP', usuario.id,'Toyota','Toyota Yaris','1,5 L híbrido', 'HIBRIDO', 6.0 );
 
       // THEN: se inserta su vehiculo correctamente
@@ -85,7 +85,7 @@ describe('HU11 · Alta vehiculo', () => {
     });
 
     it('EV11.5 · dos usuarios con sesión dan de alta el mismo vehiculo (con misma matrícula)', async () => {
-      // GIVEN: un usuario (ana@gmail.com) con la sesión iniciada ha dado de alta el vehiculo (modelo:'Toyota Yaris', matricula:'1234QWR', motor:'1,5L Hibrido', consumo:'6,0')
+      // GIVEN: un usuario (ana@gmail.com) con la sesión iniciada ha dado de alta el vehiculo (modelo:'Toyota Yaris', matricula:'1234DWR', motor:'1,5L Hibrido', consumo:'6,0')
       // y  otro usuario (manolo@gmail.com) con sesión iniciada
       const usuario1 = await crearUsuario(bd.prisma, { correo: 'ana@gmail.com'
       });
@@ -93,11 +93,11 @@ describe('HU11 · Alta vehiculo', () => {
 
       const token1 = await crearSesion(bd.prisma, usuario1.id);
       const token2 = await crearSesion(bd.prisma, usuario2.id);
-      await servicio.darAlta('1234QWR', usuario1.id,'Toyota','Toyota Yaris','1,5 L híbrido', 'HIBRIDO', 6.0 );
+      await servicio.darAlta('1234DWR', usuario1.id,'Toyota','Toyota Yaris','1,5 L híbrido', 'HIBRIDO', 6.0 );
 
 
-      // WHEN: da de alta el vehiculo (modelo:'Toyota Yaris', matricula:'1234QWR', motor:'1,5 L híbrido', consumo:'6,0')
-      const vehiculo = await servicio.darAlta('1234QWR', usuario2.id,'Toyota','Toyota Yaris','1,5 L híbrido', 'HIBRIDO', 6.0 );
+      // WHEN: da de alta el vehiculo (modelo:'Toyota Yaris', matricula:'1234DWR', motor:'1,5 L híbrido', consumo:'6,0')
+      const vehiculo = await servicio.darAlta('1234DWR', usuario2.id,'Toyota','Toyota Yaris','1,5 L híbrido', 'HIBRIDO', 6.0 );
 
       // THEN: se inserta su vehiculo correctamente
       expect(vehiculo).not.toBeNull();
@@ -106,18 +106,18 @@ describe('HU11 · Alta vehiculo', () => {
 
     it('EI11.1 · vehículo duplicado exacto ', async () => {
       // GIVEN:  usuario habiendo iniciado sesión y
-      // su lista de vehículos= [“Toyota Yaris” (“1234QWR”, “1,5 L Diesel",”6,0”) ]
+      // su lista de vehículos= [“Toyota Yaris” (“1234DWR”, “1,5 L Diesel",”6,0”) ]
       const usuario = await crearUsuario(bd.prisma, { correo: 'ana@gmail.com'
       });
 
       const token = await crearSesion(bd.prisma, usuario.id);
 
 
-      const vehiculoPr = await servicio.darAlta('1234QWR', usuario.id,'Toyota','Toyota Yaris','1,5 L híbrido', 'HIBRIDO', 6.0 );
+      const vehiculoPr = await servicio.darAlta('1234DWR', usuario.id,'Toyota','Toyota Yaris','1,5 L híbrido', 'HIBRIDO', 6.0 );
 
-      //WHEN: el usuario añade otro vehículo con los datos[“Toyota Yaris”(“1234QWR”, “1,5 L híbrido”,”6,0”) ]
+      //WHEN: el usuario añade otro vehículo con los datos[“Toyota Yaris”(“1234DWR”, “1,5 L híbrido”,”6,0”) ]
       //THEN: no deja añadirlo y salta la excepción
-      await expect(servicio.darAlta('1234QWR', usuario.id,'Toyota','Toyota Yaris','1,5 L híbrido', 'HIBRIDO', 6.0 )).rejects.toThrow(CarAlreadyAddedException);
+      await expect(servicio.darAlta('1234DWR', usuario.id,'Toyota','Toyota Yaris','1,5 L híbrido', 'HIBRIDO', 6.0 )).rejects.toThrow(CarAlreadyAddedException);
     });
 
     it('EI11.2 · matrícula con formato inválido', async () => {
@@ -128,9 +128,9 @@ describe('HU11 · Alta vehiculo', () => {
 
       const token = await crearSesion(bd.prisma, usuario.id);
 
-      //WHEN: el usuario añade un vehículo con los datos[“Toyota Yaris”(“1234QWRH”, “1,5 L híbrido”,”6,0”) ]
+      //WHEN: el usuario añade un vehículo con los datos[“Toyota Yaris”(“1234DWRH”, “1,5 L híbrido”,”6,0”) ]
       //THEN: no deja dar de alta y salta la excepción LicensePlateInvalidException
-      await expect(servicio.darAlta('1234QWRH', usuario.id,'Toyota','Toyota Yaris','1,5 L híbrido', 'HIBRIDO', 6.0 )).rejects.toThrow(LicensePlateInvalidException);
+      await expect(servicio.darAlta('1234DWRH', usuario.id,'Toyota','Toyota Yaris','1,5 L híbrido', 'HIBRIDO', 6.0 )).rejects.toThrow(LicensePlateInvalidException);
     });
 
     it('EI11.3 · consumo negativo o cero', async () => {
@@ -141,25 +141,25 @@ describe('HU11 · Alta vehiculo', () => {
 
       const token = await crearSesion(bd.prisma, usuario.id);
 
-      //WHEN: el usuario añade un vehículo con los datos[“Toyota Yaris”(“1234QWR”, “1,5 L Diesel”,”-10”) ]
+      //WHEN: el usuario añade un vehículo con los datos[“Toyota Yaris”(“1234DWR”, “1,5 L Diesel”,”-10”) ]
       //THEN: no deja dar de alta y salta la excepción LicensePlateInvalidException
-      await expect(servicio.darAlta('1234QWRH', usuario.id,'Toyota','Toyota Yaris','1,5 L híbrido', 'HIBRIDO', -10 )).rejects.toThrow(FuelConsumptionInvalidException);
+      await expect(servicio.darAlta('1234DWRH', usuario.id,'Toyota','Toyota Yaris','1,5 L híbrido', 'HIBRIDO', -10 )).rejects.toThrow(FuelConsumptionInvalidException);
     });
 
     it('EI11.7 · misma matrícula con datos distintos', async () => {
       // GIVEN:  usuario habiendo iniciado sesión y
-      // su lista de vehículos= [“Toyota Yaris” (“1234QWR”, “1,5 L híbrido”,”6,0”) ]
+      // su lista de vehículos= [“Toyota Yaris” (“1234DWR”, “1,5 L híbrido”,”6,0”) ]
       const usuario = await crearUsuario(bd.prisma, { correo: 'ana@gmail.com'
       });
 
       const token = await crearSesion(bd.prisma, usuario.id);
 
 
-      const vehiculoPr = await servicio.darAlta('1234QWR', usuario.id,'Toyota','Toyota Yaris','1,5 L híbrido', 'HIBRIDO', 6.0 );
+      const vehiculoPr = await servicio.darAlta('1234DWR', usuario.id,'Toyota','Toyota Yaris','1,5 L híbrido', 'HIBRIDO', 6.0 );
 
-      //WHEN: el usuario añade otro vehículo con los datos[Volkswagen Polo”(“1234QWR”, “1,0 L Gasolina”,”6,0”) ]
+      //WHEN: el usuario añade otro vehículo con los datos[Volkswagen Polo”(“1234DWR”, “1,0 L Gasolina”,”6,0”) ]
       //THEN: no deja añadirlo y salta la excepción
-      await expect(servicio.darAlta('1234QWR', usuario.id,'Volkswagen','Volkswagen Polo','1,0L Gasolina', 'GASOLINA', 5.2 )).rejects.toThrow(CarAlreadyAddedException);
+      await expect(servicio.darAlta('1234DWR', usuario.id,'Volkswagen','Volkswagen Polo','1,0L Gasolina', 'GASOLINA', 5.2 )).rejects.toThrow(CarAlreadyAddedException);
     });
 
     it('EI11.6 · nombre o modelo vacío', async () => {
@@ -170,9 +170,9 @@ describe('HU11 · Alta vehiculo', () => {
 
       const token = await crearSesion(bd.prisma, usuario.id);
 
-      //WHEN: el usuario añade un vehículo con los datos[“”(“1234QWRH”, “1,5 L híbrido”,”6,0”) ]
+      //WHEN: el usuario añade un vehículo con los datos[“”(“1234DWRH”, “1,5 L híbrido”,”6,0”) ]
       //THEN: no deja dar de alta y salta la excepción LicensePlateInvalidException
-      await expect(servicio.darAlta('1234QWRH', usuario.id,'Toyota','','1,5 L híbrido', 'HIBRIDO', 6.0 )).rejects.toThrow(CarModelMissingException);
+      await expect(servicio.darAlta('1234DWRH', usuario.id,'Toyota','','1,5 L híbrido', 'HIBRIDO', 6.0 )).rejects.toThrow(CarModelMissingException);
     });
 
   });
