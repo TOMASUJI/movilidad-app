@@ -4,14 +4,19 @@ import { prepararBaseDatosPruebas, type BaseDatosPruebas } from '../support/base
 import { crearSesion, crearUsuario, vaciarBaseDatos } from '../support/datos-pruebas.js';
 import { VehiculosService } from '../../src/vehiculos/application/vehiculos.service.js';
 import { CarAlreadyAddedException, LicensePlateInvalidException, FuelConsumptionInvalidException, CarModelMissingException } from '../../src/vehiculos/domain/excepciones.js';
+import { VehiculoRepository } from '../../src/vehiculos/application/ports/vehiculo.repository.js';
+import { PrismaVehiculoRepository } from '../../src/vehiculos/infrastructure/prisma-vehiculo.repository.js';
+import { PrismaClient } from '@prisma/client/extension';
 
 
 describe('HU11 · Alta vehiculo', () => {
     let bd: BaseDatosPruebas;
     let servicio: VehiculosService;
+    let repositorio: VehiculoRepository;
     beforeAll(async () => {
       bd = await prepararBaseDatosPruebas(); // Conecta con la base de datos de pruebas
-      servicio =  new VehiculosService();
+      repositorio = new PrismaVehiculoRepository(bd.prisma);
+      servicio =  new VehiculosService(repositorio);
     });
 
     beforeEach(() => vaciarBaseDatos(bd.prisma)); // Cada prueba empieza con las tablas vacías
