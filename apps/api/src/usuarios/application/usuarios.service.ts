@@ -21,7 +21,8 @@ export class UsuariosService {
 
   // HU01: Registra un usuario nuevo; si el correo ya existe, UserExistsAlrredyExcepiton
   async registrar(correo: string, contrasena: string): Promise<Usuario>{
-    throw new Error('No implementado (HU01)');
+    const cifrada = await this.cifrador.cifrar(contrasena);
+    return this.usuarios.guardar(correo, cifrada);
   }
 
   // HU03: cambia los datos del usuario logueado; si un dato no es válido, WrongModificationException
