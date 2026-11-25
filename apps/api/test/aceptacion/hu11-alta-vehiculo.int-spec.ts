@@ -143,7 +143,7 @@ describe('HU11 · Alta vehiculo', () => {
 
       //WHEN: el usuario añade un vehículo con los datos[“Toyota Yaris”(“1234DWR”, “1,5 L Diesel”,”-10”) ]
       //THEN: no deja dar de alta y salta la excepción LicensePlateInvalidException
-      await expect(servicio.darAlta('1234DWRH', usuario.id,'Toyota','Toyota Yaris','1,5 L híbrido', 'HIBRIDO', -10 )).rejects.toThrow(FuelConsumptionInvalidException);
+      await expect(servicio.darAlta('1234DWR', usuario.id,'Toyota','Toyota Yaris','1,5 L híbrido', 'HIBRIDO', -10 )).rejects.toThrow(FuelConsumptionInvalidException);
     });
 
     it('EI11.7 · misma matrícula con datos distintos', async () => {
@@ -172,7 +172,7 @@ describe('HU11 · Alta vehiculo', () => {
 
       //WHEN: el usuario añade un vehículo con los datos[“”(“1234DWRH”, “1,5 L híbrido”,”6,0”) ]
       //THEN: no deja dar de alta y salta la excepción LicensePlateInvalidException
-      await expect(servicio.darAlta('1234DWRH', usuario.id,'Toyota','','1,5 L híbrido', 'HIBRIDO', 6.0 )).rejects.toThrow(CarModelMissingException);
+      await expect(servicio.darAlta('1234DWR', usuario.id,'Toyota','','1,5 L híbrido', 'HIBRIDO', 6.0 )).rejects.toThrow(CarModelMissingException);
     });
 
   });
