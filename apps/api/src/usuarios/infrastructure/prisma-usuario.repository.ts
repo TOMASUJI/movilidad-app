@@ -33,7 +33,7 @@ export class PrismaUsuarioRepository implements UsuarioRepository{
     throw new Error('No implementado (HU03)');
   }
 
-  async eliminar (id: string): Promise<void>{
+  async eliminar(id: string): Promise<void>{
     await this.prisma.usuario.delete({ where: { id } });
   }
 }
