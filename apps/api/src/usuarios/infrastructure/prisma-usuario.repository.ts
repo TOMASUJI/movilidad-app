@@ -26,7 +26,7 @@ export class PrismaUsuarioRepository implements UsuarioRepository{
   }
 
   async buscarPorId(id: string): Promise<Usuario | null> {
-    throw new Error('No implementado (HU02)');
+    return this.prisma.usuario.findUnique({ where: { id } });
   }
 
   async actualizar(usuario: Usuario): Promise<Usuario>{
@@ -34,7 +34,7 @@ export class PrismaUsuarioRepository implements UsuarioRepository{
   }
 
   async eliminar (id: string): Promise<void>{
-    throw new Error('No implementado (HU05)');
+    await this.prisma.usuario.delete({ where: { id } });
   }
 }
 

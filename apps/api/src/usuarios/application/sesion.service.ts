@@ -37,6 +37,10 @@ export class SesionService {
     if (!sesion) {
       throw new NotLoggedInUserException();                     // 2. no → fuera
     }
-    throw new Error('No implementado (HU05)');
+    const usuario = await this.usuarios.buscarPorId(sesion.idUsuario);  // 3. ¿de quién es la pulsera?
+    if (!usuario) {
+      throw new NotLoggedInUserException();                             // 4. sesión de alguien que ya no existe
+    }
+    return usuario;
   }
 }

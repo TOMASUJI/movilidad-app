@@ -35,6 +35,7 @@ export class UsuariosService {
 
   // HU05: elimina la cuenta del usuario logueado; sin sesión, NotLoggedInUserException
   async eliminarCuenta(token: string){
-    await this.sesion.usuarioDeSesion(token);
+    const usuario = await this.sesion.usuarioDeSesion(token);   // 1. ¿quién es? (sin sesión → excepción)
+    await this.usuarios.eliminar(usuario.id);                   // 2. borrar su cuenta
   }
 }
