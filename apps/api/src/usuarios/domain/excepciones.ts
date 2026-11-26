@@ -10,3 +10,10 @@ export class NotLoggedInUserException extends Error {   // Clase que herda de Er
   }
 }
 
+// Se lanza al registrarse con un correo que ya está registrado (HU01)
+export class UserExistsAlreadyException extends Error {
+  constructor() {
+    super('Ya existe un usuario con ese correo');
+    this.name = 'UserExistsAlreadyException';
+  }
+}

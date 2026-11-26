@@ -1,5 +1,4 @@
 // Servicio de usuarios: casos de uso de la cuenta (HU01 registrarse, HU03 modificar, HU05 eliminar).
-// De momento es un ESQUELETO: los métodos existen para que las pruebas se ejecuten (en rojo).
 
 // ###### BLOQUE 1 ######
 // Imports
@@ -7,6 +6,7 @@ import type { DatosCuenta, Usuario } from '../domain/usuario.js';           // L
 import type { CifradorContrasenas } from './ports/cifrador-contrasenas.js'; // Puerto: cifrar la contraseña al registrarse
 import type { UsuarioRepository } from './ports/usuario.repository.js';     // Puerto: guardar, actualizar y borrar usuarios
 import type { SesionService } from './sesion.service.js';                   // El "portero": quién es el usuario de un token
+import { UserExistsAlreadyException } from '../domain/excepciones.js';
 
 // ###### BLOQUE 2 ######
 // La clase
@@ -19,9 +19,13 @@ export class UsuariosService {
 
   // ###### BLOQUE 3 ######
 
-  // HU01: Registra un usuario nuevo; si el correo ya existe, UserExistAlrredyExcepiton
+  // HU01: Registra un usuario nuevo; si el correo ya existe, UserExistsAlreadyException
   async registrar(correo: string, contrasena: string): Promise<Usuario>{
-    throw new Error('No implementado (HU01)');
+    if (await this.usuarios.buscarPorCorreo(correo)) {        // 0. ¿ya existe ese correo?
+      throw new UserExistsAlreadyException();
+    }
+    const cifrada = await this.cifrador.cifrar(contrasena);
+    return this.usuarios.guardar(correo, cifrada);
   }
 
   // HU03: cambia los datos del usuario logueado; si un dato no es válido, WrongModificationException
