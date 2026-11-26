@@ -51,7 +51,8 @@ enum TipoMotor {
 model Vehiculo {
   id        String    @id @default(uuid()) @db.Uuid                       // Clave primaria propia (ya no la matrícula)
   idUsuario String    @map("id_usuario") @db.Uuid
-  nombre    String    @db.VarChar(30)                                      // "Coche de casa"
+  marca    String    @db.VarChar(30)
+  modelo   String    @db.VarChar(30)
   motor     String    @db.VarChar(30)
   matricula String    @db.VarChar(10)
   tipoMotor TipoMotor @map("tipo_motor")
