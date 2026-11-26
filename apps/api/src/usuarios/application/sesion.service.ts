@@ -8,6 +8,7 @@ import type { CifradorContrasenas } from './ports/cifrador-contrasenas.js';
 import type { SesionRepository } from './ports/sesion.repository.js';
 import type { UsuarioRepository } from './ports/usuario.repository.js';
 import type { RegistroProcesos } from '../../procesos/application/ports/registro-procesos.js'; // Para saber si hay procesos en marcha (HU04)
+import { NotLoggedInUserException } from '../domain/excepciones.js';
 
 export class SesionService {
   constructor(
@@ -32,6 +33,14 @@ export class SesionService {
 
   // El "portero": devuelve el usuario de la sesión; si el token no es válido, NotLoggedInUserException
   async usuarioDeSesion(token: string): Promise<Usuario> {
-    throw new Error('No implementado (HU02)');
+    const sesion = await this.sesiones.buscarPorToken(token);   // 1. ¿existe esta "pulsera"?
+    if (!sesion) {
+      throw new NotLoggedInUserException();                     // 2. no → fuera
+    }
+    const usuario = await this.usuarios.buscarPorId(sesion.idUsuario);  // 3. ¿de quién es la pulsera?
+    if (!usuario) {
+      throw new NotLoggedInUserException();                             // 4. sesión de alguien que ya no existe
+    }
+    return usuario;
   }
 }
