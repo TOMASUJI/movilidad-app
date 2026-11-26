@@ -33,8 +33,8 @@ export class UsuariosService {
     throw new Error('No implementado (HU03)');
   }
 
-  // HU05: elemina la cuenta del usuario loguead; sin sesión, NotLoggedInUserException
+  // HU05: elimina la cuenta del usuario logueado; sin sesión, NotLoggedInUserException
   async eliminarCuenta(token: string){
-    throw new Error('No implementado (HU05)');
+    await this.sesion.usuarioDeSesion(token);
   }
 }
