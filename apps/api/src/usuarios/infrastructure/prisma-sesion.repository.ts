@@ -15,7 +15,7 @@ export class PrismaSesionRepository implements SesionRepository {
     throw new Error('No implementado (HU02)');                  // HU02: al iniciar sesión, se crea
   }
   async buscarPorToken(token: string): Promise<Sesion | null>{  // ¿Esta "pulsera" es válida? (HU03, HU04, HU05, vehículos)
-    return this.prisma.sesion.findUnique({ where: { token } });;
+    return this.prisma.sesion.findUnique({ where: { token } });
   }
   async eliminar(token: string): Promise<void>{
     throw new Error('No implementado (HU04');                   // Al cerrar sesión se borra

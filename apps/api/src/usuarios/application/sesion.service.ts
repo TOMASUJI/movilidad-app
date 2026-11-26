@@ -1,6 +1,5 @@
 // Servicio de sesión (casos de uso de HU02 y HU04) y "portero" del resto de historias.
-// De momento es un ESQUELETO: los métodos existen para que las pruebas compilen y se ejecuten,
-// pero lanzan "No implementado". La lógica se escribirá en la iteración 1 (ATDD: primero las pruebas en rojo).
+// usuarioDeSesion implementado (HU05); iniciarSesion (HU02) y cerrarSesion (HU04) todavía son esqueleto.
 
 // ###### BLOQUE 1 ###### Imports y dependencias
 import type { Sesion, Usuario } from '../domain/usuario.js';
