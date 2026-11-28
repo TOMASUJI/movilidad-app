@@ -4,7 +4,7 @@
 
 // ###### BLOQUE 1 ###### Imports y vaciar la base de datos
 import { randomUUID } from 'node:crypto';                                    // Generador de textos aleatorios únicos (para los tokens)
-import type { PrismaClient } from '../../src/generated/prisma/client.js';   // El cliente que generó Prisma con nuestro esquema
+import type { PrismaClient, TipoMotor } from '../../src/generated/prisma/client.js';   // El cliente que generó Prisma con nuestro esquema
 
 // Deja las tablas vacías. Se llama antes de CADA prueba, para que todas empiecen igual.
 
@@ -42,4 +42,35 @@ export async function crearSesion(prisma: PrismaClient, idUsuario: string): Prom
     },
   });
   return sesion.token;
+}
+
+// ###### BLOQUE 4 ###### Crear un vehículo
+interface DatosVehiculoPrueba {
+  matricula: string;
+  marca: string;
+  modelo: string;
+  motor: string;
+  tipoMotor: TipoMotor;
+  consumo: number;
+  favorito: boolean;
+}
+
+// Mete un vehículo en la tabla "vehiculos" para ese usuario y lo devuelve (con su id)
+export async function crearVehiculo(
+  prisma: PrismaClient,
+  idUsuario: string,
+  datos: DatosVehiculoPrueba,
+) {
+  return prisma.vehiculo.create({
+    data: {
+      idUsuario,
+      matricula: datos.matricula,
+      modelo: datos.modelo,
+      marca: datos.marca,
+      motor: datos.motor,
+      tipoMotor: datos.tipoMotor,
+      consumo: datos.consumo,
+      favorito: datos.favorito,
+    },
+  });
 }
